@@ -5,15 +5,15 @@ services:
     image: mariadb:latest
     restart: always
     volumes:
-      - ./mysql:/var/lib/mysql
+      - ./docker/mysql:/var/lib/mysql
     ports:
       - 3306:3306
     command: '--default-authentication-plugin=mysql_native_password'
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
-      MYSQL_USER: ${WORDPRESS_DB_USER}
-      MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${WORDPRESS_DB_NAME}
+      MARIADB_USER: ${WORDPRESS_DB_USER}
+      MARIADB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
 
   traefik:
     image: traefik:latest
@@ -44,7 +44,7 @@ services:
     depends_on:
       - mysql
     volumes:
-      - ./wordpress:/var/www/html
+      - ./docker/wordpress:/var/www/html
     expose:
       - 80
       - 443
@@ -75,11 +75,11 @@ services:
     depends_on:
       - wordpress
     volumes:
-      - ./wordpress:/var/www/html
+      - ./docker/wordpress:/var/www/html
       - ./setup.sh:/var/www/html/setup.sh
       - ./.env:/var/www/html/.env
     user: xfs
-    command: tail -f /dev/null;
+    command: tail -F /dev/null
     environment:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
       WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}

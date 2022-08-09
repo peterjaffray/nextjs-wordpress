@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-white dark:bg-black;
+  }
+
+  a:hover {
+    @apply no-underline;
+  }
+}
